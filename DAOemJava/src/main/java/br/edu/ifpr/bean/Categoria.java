@@ -9,6 +9,7 @@ package br.edu.ifpr.bean;
  * @author Aluno
  */
 public class Categoria {
+    
     private int id;
     private String descricao;
 
@@ -30,7 +31,9 @@ public class Categoria {
 
     @Override
     public String toString() {
-        return "Categoria{" + "id=" + String.valueOf(id) + ", descricao=" + descricao + '}';
+        return "id: " + String.valueOf(id) + " Descrição: " + descricao;
     }
     
+    
+
 }

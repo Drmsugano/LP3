@@ -9,7 +9,7 @@ package br.edu.ifpr.bean;
  * @author Aluno
  */
 public class Produto {
-
+    
     private int id;
     private String descricao;
     private Categoria categoria;
@@ -19,6 +19,11 @@ public class Produto {
         this.descricao = descricao;
         this.categoria = categoria;
     }
+
+    public Produto() {
+    }
+    
+    
 
     public int getId() {
         return id;
@@ -43,4 +48,6 @@ public class Produto {
     public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
     }
+    
+    
 }

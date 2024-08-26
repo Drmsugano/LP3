@@ -1,31 +1,61 @@
-
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package br.edu.ifpr.util;
-// Classe de Conexão com o Banco
 
-import java.sql.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
+/**
+ * Classe de conexão com o banco de dados
+ * Usuário: root
+ * Senha: ""
+ * 
+ * Utilizamos essa estrutura para evitar repetição de código
+ * e simplificar a obtenção de conexão com o banco de dados
+ * 
+ * @author Everton Baro
+ */
 public class ConnectionFactory {
-    private static final String USERNAME = "root";
-    private static final String PASSWORD = "";
-    private static final String DATABASE_URL = "jdbc:mysql://127.0.0.1:3306/ifpr";
     
-    public static Connection createConnectionToMysql(){
+    // Nome do usuário do MySQL 
+    private static final String USERNAME = "efbaro";
+    
+    // Senha do Mysql
+    private static final String PASSWORD = "1234";
+    
+    // String de conexão com o banco de dados
+    // Porta e nome do banco de dados no qual pretende-se se conectar
+    private static final String DATABASE_URL = "jdbc:mysql://localhost:3306/ifpr";
+    
+    public static Connection createConnectionToMySQL() {
+        
         try {
-            Connection conn = DriverManager.getConnection(DATABASE_URL,USERNAME,PASSWORD);
-            return conn;
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
+            // Cria a conexão com banco de dados.
+            Connection connection = DriverManager.getConnection(DATABASE_URL, USERNAME, PASSWORD);
+            return connection;
+            
+        } catch (SQLException e) {
+            System.out.println("Não foi possível conectar-se ao Banco de Dados");
+            System.out.println(DATABASE_URL);
+            System.out.println(e.getMessage());
             return null;
         }
     }
+    
     public static void main(String[] args) {
-        Connection con = createConnectionToMysql();
-        if (con != null){
-            System.out.println("Conectado com sucesso");
-        } else{
-            System.out.println("Não foi possivel conectar");
+        
+        Connection con = createConnectionToMySQL();
+        
+        if (con != null) {
+            System.out.println("Conexão obtida com sucesso!" + con);
+        } else {
+            System.out.println("Não foi possível fazer a conexão.");
         }
+        
     }
+    
+    
 }
