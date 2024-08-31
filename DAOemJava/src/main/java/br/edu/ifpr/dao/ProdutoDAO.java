@@ -30,7 +30,7 @@ public class ProdutoDAO implements Dao<Integer, Produto>{
     @Override
     public void create(Produto entity) {
         
-        String sql = "INSERT INTO produto (descricao, categoria_id) VALUES (?, ?);";
+        String sql = "INSERT INTO produto (descricao, categoria_id, valor) VALUES (?, ?, ?);";
         
         try {
             PreparedStatement query = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -46,6 +46,7 @@ public class ProdutoDAO implements Dao<Integer, Produto>{
             } 
 
             query.setInt(2, entity.getCategoria().getId());
+            query.setDouble(3, entity.getValor());
             query.executeUpdate();
             
             ResultSet rs = query.getGeneratedKeys();
@@ -67,7 +68,7 @@ public class ProdutoDAO implements Dao<Integer, Produto>{
         
         Produto produto = null;
         
-        String sql = "SELECT id, descricao, categoria_id FROM produto WHERE id = ?";
+        String sql = "SELECT id, descricao, categoria_id, valor FROM produto WHERE id = ?";
         
         try {
             PreparedStatement query = con.prepareStatement(sql);
@@ -80,7 +81,7 @@ public class ProdutoDAO implements Dao<Integer, Produto>{
                 produto = new Produto();
                 produto.setId(rs.getInt("id"));
                 produto.setDescricao(rs.getString("descricao"));
-                
+                produto.setValor(rs.getDouble("valor"));
                 int id_categoria = rs.getInt("categoria_id");
                 Categoria categoria = daoCategoria.retrieve(id_categoria);
                 

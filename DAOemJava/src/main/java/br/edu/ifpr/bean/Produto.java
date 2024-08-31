@@ -13,11 +13,21 @@ public class Produto {
     private int id;
     private String descricao;
     private Categoria categoria;
+    private double valor;
+
+    public double getValor() {
+        return valor;
+    }
+
+    public void setValor(double valor) {
+        this.valor = valor;
+    }
 
     public Produto(int id, String descricao, Categoria categoria) {
         this.id = id;
         this.descricao = descricao;
         this.categoria = categoria;
+        this.valor = valor;
     }
 
     public Produto() {

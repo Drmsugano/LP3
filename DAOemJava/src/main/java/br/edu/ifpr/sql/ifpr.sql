@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS categoria (
 CREATE TABLE IF NOT EXISTS produto(
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     descricao VARCHAR(45) NOT NULL,
+    valor FLOAT,
     categoria_id INT NOT NULL,
     FOREIGN KEY (categoria_id) REFERENCES categoria (id)
 );
