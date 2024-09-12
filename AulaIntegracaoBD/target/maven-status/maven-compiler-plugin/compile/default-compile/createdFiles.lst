@@ -1,0 +1,14 @@
+br\edu\ifpr\dao\CategoriaDAO.class
+br\edu\ifpr\view\CadastroProduto.class
+br\edu\ifpr\view\tablemodel\ProdutoTableModel.class
+br\edu\ifpr\view\tablemodel\CBCategoriaMoldel.class
+br\edu\ifpr\dao\ProdutoDAO.class
+br\edu\ifpr\sql\PopulaBD.class
+br\edu\ifpr\view\Teste.class
+br\edu\ifpr\bean\Produto.class
+br\edu\ifpr\util\ConnectionFactory.class
+br\edu\ifpr\view\CadastroProduto$1.class
+br\edu\ifpr\bean\Categoria.class
+br\edu\ifpr\dao\Dao.class
+br\edu\ifpr\view\CadastroProdutoPanel$1.class
+br\edu\ifpr\view\CadastroProdutoPanel.class
