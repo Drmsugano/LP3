@@ -52,7 +52,15 @@ public class CategoriaTableModel extends AbstractTableModel{
 
     @Override
     public Object getValueAt(int linha, int coluna) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        Categoria categoria = dados.get(linha);
+        switch(coluna){
+            case 0:
+                return categoria.getId();
+            case 1:
+                return categoria.getDescricao();
+            default:
+                return null;
+        }
     }
     
 }
