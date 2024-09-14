@@ -28,7 +28,7 @@ public class ConnectionFactory {
     
     // String de conexão com o banco de dados
     // Porta e nome do banco de dados no qual pretende-se se conectar
-    private static final String DATABASE_URL = "jdbc:mysql://localhost:3306/ifpr_lp3";
+    private static final String DATABASE_URL = "jdbc:mysql://localhost:3306/ifpr";
     
     public static Connection createConnectionToMySQL() {
         

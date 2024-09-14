@@ -7,6 +7,7 @@ package br.edu.ifpr.view;
 import br.edu.ifpr.bean.Categoria;
 import br.edu.ifpr.dao.CategoriaDAO;
 import br.edu.ifpr.util.ConnectionFactory;
+import br.edu.ifpr.util.Observer;
 import br.edu.ifpr.view.tablemodel.CategoriaTableModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -18,16 +19,17 @@ import javax.swing.JOptionPane;
  * @author Aluno
  */
 public class CadastroCategoria extends javax.swing.JFrame {
-
+    private CadastroProdutoPanel telaProduto;
     private CategoriaTableModel tbm;
     private Categoria categoriaSelecionada = null;
     /**
      * Creates new form CadastroCategoria
      */
-    public CadastroCategoria() {
+    public CadastroCategoria(Observer cbObserver) {
         initComponents();
         tfID.setEditable(false);
         tbm = new CategoriaTableModel();
+        tbm.add(cbObserver);
         tblCategoria.setModel(tbm);
         popula();
         tblCategoria.addMouseListener(new MouseAdapter(){
@@ -76,7 +78,8 @@ public class CadastroCategoria extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblCategoria = new javax.swing.JTable();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Cadastro de Categoria");
 
         jlID.setText("ID");
 
@@ -122,11 +125,12 @@ public class CadastroCategoria extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jSeparator1)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
                             .addComponent(jlID))
@@ -136,18 +140,17 @@ public class CadastroCategoria extends javax.swing.JFrame {
                                 .addComponent(tfID, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addComponent(tfDescricao)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(jlCategoria)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 152, Short.MAX_VALUE)
                         .addComponent(btnEditar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnCadastrar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnExcluir)))
                 .addContainerGap())
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -175,6 +178,7 @@ public class CadastroCategoria extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
@@ -184,6 +188,7 @@ public class CadastroCategoria extends javax.swing.JFrame {
         CategoriaDAO dao = new CategoriaDAO(ConnectionFactory.createConnectionToMySQL());
         dao.create(categoria);
         tbm.add(categoria);
+        //telaProduto.populaCB();
         limpaTela();
     }//GEN-LAST:event_btnCadastrarActionPerformed
 
@@ -196,6 +201,7 @@ public class CadastroCategoria extends javax.swing.JFrame {
             CategoriaDAO dao = new CategoriaDAO(ConnectionFactory.createConnectionToMySQL());
             dao.update(categoriaSelecionada);
             tbm.fireTableDataChanged();
+            //telaProduto.populaCB();
             limpaTela();
             categoriaSelecionada = null;
         }
@@ -209,6 +215,7 @@ public class CadastroCategoria extends javax.swing.JFrame {
         tbm.fireTableDataChanged();
         limpaTela();
         tbm.remove(categoriaSelecionada);
+        //telaProduto.populaCB();
         categoriaSelecionada = null;
     }//GEN-LAST:event_btnExcluirActionPerformed
 
@@ -242,7 +249,7 @@ public class CadastroCategoria extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new CadastroCategoria().setVisible(true);
+                new CadastroCategoria(null).setVisible(true);
             }
         });
     }

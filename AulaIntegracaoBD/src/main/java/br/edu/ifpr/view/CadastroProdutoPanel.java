@@ -80,6 +80,11 @@ public class CadastroProdutoPanel extends JPanel {
         cbm.addAll(daoCat.findALL());
 
     }
+    
+    private void abrirCategoria(){
+        CadastroCategoria tela = new CadastroCategoria(cbm);
+        tela.setVisible(true);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -102,6 +107,7 @@ public class CadastroProdutoPanel extends JPanel {
         btnCadastrar = new javax.swing.JButton();
         btnEditar = new javax.swing.JButton();
         jbExcluir = new javax.swing.JButton();
+        jbNovaCategoria = new javax.swing.JButton();
 
         lblID.setText("ID");
 
@@ -145,6 +151,13 @@ public class CadastroProdutoPanel extends JPanel {
             }
         });
 
+        jbNovaCategoria.setText("...");
+        jbNovaCategoria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbNovaCategoriaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -152,32 +165,36 @@ public class CadastroProdutoPanel extends JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(spProduto, javax.swing.GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE)
+                    .addComponent(spProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblDescricao)
-                            .addComponent(lblID))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(tfID, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(tfDescricao)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblCategoria)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbCategoria, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblProduto)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btnEditar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnCadastrar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jbExcluir)
-                        .addGap(15, 15, 15)))
+                            .addComponent(lblProduto)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(lblDescricao)
+                                        .addComponent(lblID))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(tfID, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(tfDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(btnEditar)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                            .addComponent(btnCadastrar)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                            .addComponent(jbExcluir))
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(lblCategoria)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(cbCategoria, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(jbNovaCategoria)
+                                    .addGap(6, 6, 6))))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -194,7 +211,8 @@ public class CadastroProdutoPanel extends JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cbCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblCategoria))
+                    .addComponent(lblCategoria)
+                    .addComponent(jbNovaCategoria))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCadastrar)
@@ -247,6 +265,16 @@ public class CadastroProdutoPanel extends JPanel {
         produtoSelecionado = null;
     }//GEN-LAST:event_jbExcluirActionPerformed
 
+    private void jbNovaCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbNovaCategoriaActionPerformed
+        // TODO add your handling code here:
+        abrirCategoria();
+    }//GEN-LAST:event_jbNovaCategoriaActionPerformed
+
+   /* public static void populaCB(){
+        Connection con = ConnectionFactory.createConnectionToMySQL();
+        CategoriaDAO daoCat = new CategoriaDAO(con);
+        cbm.addAll(daoCat.findALL());
+    }*/
     
     private void limpaTela() {
         tfID.setText("");
@@ -259,6 +287,7 @@ public class CadastroProdutoPanel extends JPanel {
     private javax.swing.JButton btnEditar;
     private javax.swing.JComboBox<Categoria> cbCategoria;
     private javax.swing.JButton jbExcluir;
+    private javax.swing.JButton jbNovaCategoria;
     private javax.swing.JLabel lblCategoria;
     private javax.swing.JLabel lblDescricao;
     private javax.swing.JLabel lblID;
