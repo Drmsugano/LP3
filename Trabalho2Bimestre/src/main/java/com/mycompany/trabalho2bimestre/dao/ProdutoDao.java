@@ -32,8 +32,8 @@ public class ProdutoDao implements Dao<Integer, Produto> {
             PreparedStatement query = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             query.setString(1, entity.getDescricao());
             query.setString(2, entity.getTipo());
-            query.setString(3, entity.getCategoria());
-            query.setInt(4, entity.getQuantidade());
+            query.setInt(3, entity.getQuantidade());
+            query.setString(4, entity.getCategoria());
             query.executeUpdate();
             ResultSet rs = query.getGeneratedKeys();
             if (rs.next()) {
