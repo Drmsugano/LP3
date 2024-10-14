@@ -73,7 +73,7 @@ public class ProdutoDao implements Dao<Integer, Produto> {
 
     @Override
     public void update(Produto entity) {
-        String sql = "update equipe SET descricao = ?, tipo = ?, categoria= ?, quantidade= ? WHERE id = ?;";
+        String sql = "update produto SET descricao = ?, tipo = ?, categoria= ?, quantidade= ? WHERE id = ?;";
         try {
             PreparedStatement query = con.prepareStatement(sql);
             query.setString(1, entity.getDescricao());
@@ -111,6 +111,15 @@ public class ProdutoDao implements Dao<Integer, Produto> {
         try {
             PreparedStatement query = con.prepareStatement(sql);
             ResultSet rs = query.executeQuery();
+            while(rs.next()){
+                Produto produto = new Produto();
+                produto.setId(rs.getInt("id"));
+                produto.setDescricao(rs.getString("descricao"));
+                produto.setTipo(rs.getString("tipo"));
+                produto.setQuantidade(rs.getInt("quantidade"));
+                produto.setCategoria(rs.getString("categoria"));
+                produtos.add(produto);
+            }
             query.close();
         } catch (SQLException e) {
             System.out.println("Erro : " + e.getMessage());
