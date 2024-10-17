@@ -4,6 +4,11 @@
  */
 package com.mycompany.trabalho2bimestre.view;
 
+import com.mycompany.trabalho2bimestre.bean.Equipe;
+import com.mycompany.trabalho2bimestre.dao.EquipeDao;
+import com.mycompany.trabalho2bimestre.util.ConnectionFactory;
+import com.mycompany.trabalho2bimestre.view.models.EquipeTableModel;
+import java.sql.Connection;
 import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,15 +20,27 @@ import javax.swing.text.MaskFormatter;
  */
 public class EquipeGerenciar extends javax.swing.JFrame {
 
+    private EquipeTableModel tbm = new EquipeTableModel();
+    private Equipe linhaSeleciuonada = null;
+
     /**
      * Creates new form EquipeGerenciar
      */
     public EquipeGerenciar() throws ParseException {
         initComponents();
+        jtId.setEditable(false);
+
         MaskFormatter maskDataInicio = new MaskFormatter("##/##/####");
         maskDataInicio.install(jtDataInicio);
+        MaskFormatter maskDataFim = new MaskFormatter("##/##/####");
+        maskDataInicio.install(jtDataFim);
     }
 
+      private void popula() {
+        Connection con = ConnectionFactory.createConnectionToMySQL();
+        EquipeDao dao = new EquipeDao(con);
+        tbm.addList(dao.findALL());
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
