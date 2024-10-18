@@ -48,7 +48,7 @@ public class VendaDao implements Dao<Integer, Venda> {
     public Venda retrieve(Integer pk) {
         Venda venda = null;
         if (pk != null) {
-            String sql = "SELECT id, valor, produto_id, vendedor_id, data FROM venda WHERE id = ?";
+            String sql = "SELECT id, valor, produto_id, vendedor_id FROM venda WHERE id = ?";
             try {
                 PreparedStatement query = con.prepareStatement(sql);
                 query.setInt(1, pk);
@@ -65,7 +65,6 @@ public class VendaDao implements Dao<Integer, Venda> {
                     int id_vendedor = rs.getInt("vendedor_id");
                     Vendedor vendedor = vendedorDao.retrieve(id_vendedor);
                     venda.setVendedor(vendedor);
-                    venda.setData(rs.getDate("data"));
                 }
                 query.close();
             } catch (SQLException e) {
@@ -78,20 +77,21 @@ public class VendaDao implements Dao<Integer, Venda> {
     @Override
     public void update(Venda entity) {
         String sql = "UPDATE venda SET produto_id = ? , valor = ?, vendedor_id = ? where id = ?";
-        try{
+        try {
             PreparedStatement query = con.prepareStatement(sql);
-            query.setInt(1,entity.getProduto().getId());
-            query.setDouble(2,entity.getValor());
-            query.setInt(3,entity.getVendedor().getId());
+            query.setInt(1, entity.getProduto().getId());
+            query.setDouble(2, entity.getValor());
+            query.setInt(3, entity.getVendedor().getId());
+            query.setInt(4, entity.getId());
             query.executeUpdate();
-        }catch(SQLException e){
+        } catch (SQLException e) {
             System.out.println("Erro " + e.getMessage());
         }
     }
 
     @Override
     public void delete(Integer pk) {
-         String sql = "DELETE FROM venda WHERE id = ?";
+        String sql = "DELETE FROM venda WHERE id = ?";
         try {
             PreparedStatement query = con.prepareStatement(sql);
             query.setInt(1, pk);
@@ -108,10 +108,25 @@ public class VendaDao implements Dao<Integer, Venda> {
     @Override
     public List<Venda> findALL() {
         List<Venda> venda = new LinkedList<Venda>();
-        String sql = "SELECT * FROM venda WHERE id";
+        String sql = "SELECT id,valor,produto_id,vendedor_id,data FROM venda";
         try {
             PreparedStatement query = con.prepareStatement(sql);
+            ProdutoDao produtoDao = new ProdutoDao(con);
+            VendedorDao vendedorDao = new VendedorDao(con);
             ResultSet rs = query.executeQuery();
+            while (rs.next()) {
+                Venda vendas = new Venda();
+                vendas.setId(rs.getInt("id"));
+                vendas.setValor(rs.getDouble("valor"));
+                int id_produto = rs.getInt("produto_id");
+                Produto produto = produtoDao.retrieve(id_produto);
+                vendas.setProduto(produto);
+                int id_vendedor = rs.getInt("vendedor_id");
+                Vendedor vendedor = vendedorDao.retrieve(id_vendedor);
+                vendas.setVendedor(vendedor);
+                vendas.setData((Date) rs.getDate("data"));
+                venda.add(vendas);
+            }
             query.close();
         } catch (SQLException e) {
             System.out.println("Erro : " + e.getMessage());

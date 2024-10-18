@@ -33,8 +33,8 @@ public class EquipeDao implements Dao<Integer, Equipe> {
         try {
             PreparedStatement query = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             query.setString(1, entity.getNome());
-            query.setDate(2,new java.sql.Date(entity.getDataInicio().getTime()));
-            query.setDate(3,new java.sql.Date(entity.getDataFim().getTime()));
+            query.setDate(2, new java.sql.Date(entity.getDataInicio().getTime()));
+            query.setDate(3, new java.sql.Date(entity.getDataFim().getTime()));
             query.executeUpdate();
             ResultSet rs = query.getGeneratedKeys();
             if (rs.next()) {
@@ -101,6 +101,27 @@ public class EquipeDao implements Dao<Integer, Equipe> {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public boolean verificarEquipe(Integer pk) {
+        String sql = "SELECT COUNT(*) from equipe e inner join vendedor v on e.id = v.id WHERE v.id = ?";
+        boolean ver = true;
+        try {
+            PreparedStatement query = con.prepareStatement(sql);
+            query.setInt(1, pk);
+            ResultSet rs = query.executeQuery();
+            if (rs.next()) {
+                int count = rs.getInt(1); // Pega o valor da contagem
+                if (count < 1) {
+                    ver = true;
+                } else if(count >= 1) {
+                    ver = false;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return ver;
     }
 
     @Override

@@ -125,6 +125,11 @@ public class EquipeGerenciar extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jtEquipe);
 
         jbExcluir.setText("Excluir");
+        jbExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbExcluirActionPerformed(evt);
+            }
+        });
 
         jbEditar.setText("Editar");
         jbEditar.addActionListener(new java.awt.event.ActionListener() {
@@ -207,6 +212,7 @@ public class EquipeGerenciar extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jbCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCadastrarActionPerformed
@@ -223,18 +229,22 @@ public class EquipeGerenciar extends javax.swing.JFrame {
             } catch (ParseException ex) {
                 Logger.getLogger(EquipeGerenciar.class.getName()).log(Level.SEVERE, null, ex);
             }
-            EquipeDao dao = new EquipeDao(ConnectionFactory.createConnectionToMySQL());
-            dao.create(equipe);
-            JOptionPane.showMessageDialog(this, "Equipe Cadastrada");
-            tbm.add(equipe);
-            limpaForm();
+            if (equipe.getDataFim().after(equipe.getDataInicio()) == false) {
+                JOptionPane.showMessageDialog(this, "Data do final da equipe é maior que a data de Inicio");
+            } else {
+                EquipeDao dao = new EquipeDao(ConnectionFactory.createConnectionToMySQL());
+                dao.create(equipe);
+                JOptionPane.showMessageDialog(this, "Equipe Cadastrada");
+                tbm.add(equipe);
+                limpaForm();
+            }
         }
     }//GEN-LAST:event_jbCadastrarActionPerformed
 
     private void jbEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEditarActionPerformed
         // TODO add your handling code here:
         SimpleDateFormat formatData = new SimpleDateFormat("dd/MM/yyyy");
-           if (linhaSelecionada == null) {
+        if (linhaSelecionada == null) {
             JOptionPane.showMessageDialog(this, "Selecione uma equipe na tabela");
         }
         if (jtNome.getText().isBlank() || jtDataInicio.getText().isBlank() || jtDataFim.getText().isBlank()) {
@@ -249,11 +259,37 @@ public class EquipeGerenciar extends javax.swing.JFrame {
                 Logger.getLogger(EquipeGerenciar.class.getName()).log(Level.SEVERE, null, ex);
             }
             linhaSelecionada.setId(Integer.parseInt(jtId.getText()));
-            dao.update(linhaSelecionada);
-            tbm.fireTableDataChanged();
-            linhaSelecionada = null;
+            if (linhaSelecionada.getDataFim().after(linhaSelecionada.getDataInicio()) == false) {
+                JOptionPane.showMessageDialog(this, "Data do final da equipe é maior que a data de Inicio");
+            } else {
+                dao.update(linhaSelecionada);
+                tbm.fireTableDataChanged();
+                linhaSelecionada = null;
+            }
         }
     }//GEN-LAST:event_jbEditarActionPerformed
+
+    private void jbExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbExcluirActionPerformed
+        // TODO add your handling code here:
+        if (linhaSelecionada == null) {
+            JOptionPane.showMessageDialog(this, "Selecione um produto da Tabela");
+        } else {
+            int opcao = JOptionPane.showConfirmDialog(this, "Confirma a Exclusão");
+            if (opcao == JOptionPane.YES_OPTION) {
+                int id = Integer.parseInt(jtId.getText());
+                EquipeDao dao = new EquipeDao(ConnectionFactory.createConnectionToMySQL());
+                if(dao.verificarEquipe(linhaSelecionada.getId()) == true){
+                    JOptionPane.showMessageDialog(this,"Não é possivel excluir equipe pois há um funcionário cadastrado nesta equipe");
+                }
+                if(dao.verificarEquipe(linhaSelecionada.getId()) == false){    
+                dao.delete(id);
+                JOptionPane.showMessageDialog(this, "Equipe Excluida");
+                tbm.remove(linhaSelecionada);
+                }
+                
+            }
+        }
+    }//GEN-LAST:event_jbExcluirActionPerformed
 
     /**
      * @param args the command line arguments

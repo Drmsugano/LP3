@@ -50,7 +50,7 @@ public class VendedorDao implements Dao<Integer, Vendedor> {
     public Vendedor retrieve(Integer pk) {
         Vendedor vendedor = null;
         if (pk != null) {
-            String sql = "SELECT v.id, v.nome, equipe_id FROM vendedor v WHERE id = ?";
+            String sql = "SELECT v.id, v.nome, v.nivel ,v.equipe_id FROM vendedor v WHERE id = ?";
             try {
                 PreparedStatement query = con.prepareStatement(sql);
                 query.setInt(1, pk);
@@ -60,6 +60,7 @@ public class VendedorDao implements Dao<Integer, Vendedor> {
                     vendedor = new Vendedor();
                     vendedor.setId(rs.getInt("id"));
                     vendedor.setNome(rs.getString("nome"));
+                    vendedor.setNivel(rs.getString("nivel"));
                     int id_equipe = rs.getInt("equipe_id");
                     Equipe equipe = equipeDao.retrieve(id_equipe);
                     vendedor.setEquipe(equipe);
@@ -74,7 +75,7 @@ public class VendedorDao implements Dao<Integer, Vendedor> {
 
     @Override
     public void update(Vendedor entity) {
-        String sql = "update vendedor SET nome = ?, nivel = ? , id_categoria = ? WHERE id = ?;";
+        String sql = "update vendedor SET nome = ?, nivel = ? , equipe_id = ? WHERE id = ?;";
         try {
             PreparedStatement query = con.prepareStatement(sql);
             query.setString(1, entity.getNome());
@@ -112,10 +113,11 @@ public class VendedorDao implements Dao<Integer, Vendedor> {
             PreparedStatement query = con.prepareStatement(sql);
             ResultSet rs = query.executeQuery();
             EquipeDao equipeDao = new EquipeDao(con);
-            if (rs.next()) {
+            while (rs.next()) {
                 Vendedor vendedores = new Vendedor();
                 vendedores.setId(rs.getInt("id"));
                 vendedores.setNome(rs.getString("nome"));
+                vendedores.setNivel(rs.getString("nivel"));
                 int id_equipe = rs.getInt("equipe_id");
                 Equipe equipe = equipeDao.retrieve(id_equipe);
                 vendedores.setEquipe(equipe);

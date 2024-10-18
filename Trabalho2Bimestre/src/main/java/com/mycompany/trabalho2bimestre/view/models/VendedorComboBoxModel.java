@@ -3,30 +3,28 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.trabalho2bimestre.view.models;
-
-import com.mycompany.trabalho2bimestre.bean.Equipe;
+import com.mycompany.trabalho2bimestre.bean.Vendedor;
 import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
 
 /**
  *
- * @author Aluno
+ * @author douglas
  */
-public class EquipeComboBoxModel extends DefaultComboBoxModel<Equipe>{
-
-    public EquipeComboBoxModel(Vector<Equipe> itens) {
+public class VendedorComboBoxModel extends DefaultComboBoxModel<Vendedor>{
+    public VendedorComboBoxModel(Vector<Vendedor> itens) {
         super(itens);
     }
 
-    public EquipeComboBoxModel() {
+    public VendedorComboBoxModel() {
     }
 
-    public void setSelectedItem(Equipe equipe) {
+    public void setSelectedItem(Vendedor vendedor) {
         int numElemCB = getSize();
         for (int i = 0; i < numElemCB; i++) {
-            Equipe equipeCB = getElementAt(i);
-            if (equipeCB.getId() == equipe.getId()) {
-                super.setSelectedItem(equipeCB);
+            Vendedor vendedorCB = getElementAt(i);
+            if (vendedorCB.getId() == vendedor.getId()) {
+                super.setSelectedItem(vendedorCB);
             }
         }
     }

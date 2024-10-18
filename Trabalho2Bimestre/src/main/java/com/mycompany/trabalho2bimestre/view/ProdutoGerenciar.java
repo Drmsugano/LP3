@@ -89,7 +89,7 @@ public class ProdutoGerenciar extends javax.swing.JFrame {
         jbEditar = new javax.swing.JButton();
         jbCadastrar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
 
         jLabel1.setFont(new java.awt.Font("DejaVu Serif Condensed", 1, 18)); // NOI18N
@@ -225,6 +225,7 @@ public class ProdutoGerenciar extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jtfIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfIdActionPerformed
@@ -243,6 +244,7 @@ public class ProdutoGerenciar extends javax.swing.JFrame {
             produto.setQuantidade(Integer.parseInt(jtfQuantidade.getText()));
             ProdutoDao dao = new ProdutoDao(ConnectionFactory.createConnectionToMySQL());
             dao.create(produto);
+            JOptionPane.showMessageDialog(this, "Produto Cadastrado");
             tbm.add(produto);
         }
     }//GEN-LAST:event_jbCadastrarActionPerformed
@@ -262,6 +264,7 @@ public class ProdutoGerenciar extends javax.swing.JFrame {
             produtoSelecionado.setQuantidade(Integer.parseInt(jtfQuantidade.getText()));
             ProdutoDao dao = new ProdutoDao(ConnectionFactory.createConnectionToMySQL());
             dao.update(produtoSelecionado);
+            JOptionPane.showMessageDialog(this, "Produto Alterado");
             tbm.fireTableDataChanged();
             limpaTela();
             produtoSelecionado = null;

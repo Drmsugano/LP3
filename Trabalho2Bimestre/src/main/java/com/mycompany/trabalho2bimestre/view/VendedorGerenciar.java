@@ -5,43 +5,74 @@
 package com.mycompany.trabalho2bimestre.view;
 
 import com.mycompany.trabalho2bimestre.bean.Equipe;
+import com.mycompany.trabalho2bimestre.bean.Vendedor;
 import com.mycompany.trabalho2bimestre.dao.EquipeDao;
 import com.mycompany.trabalho2bimestre.dao.VendedorDao;
 import com.mycompany.trabalho2bimestre.util.ConnectionFactory;
 import com.mycompany.trabalho2bimestre.view.models.EquipeComboBoxModel;
 import com.mycompany.trabalho2bimestre.view.models.VendedorTableModel;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.Connection;
+import java.text.ParseException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author drmsugano
  */
 public class VendedorGerenciar extends javax.swing.JFrame {
+
     private EquipeComboBoxModel cbm;
-    private Equipe linhaSelecionada = null;
+    private Vendedor linhaSelecionada = null;
     private VendedorTableModel tbm;
+
     /**
      * Creates new form VendedorGerenciar
      */
     public VendedorGerenciar() {
         initComponents();
         jtId.setEditable(false);
-        
+
         tbm = new VendedorTableModel();
         jtVendedor.setModel(tbm);
-        
+
         cbm = new EquipeComboBoxModel();
         jcEquipe.setModel(cbm);
         popula();
-        
+        jtVendedor.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int linha = jtVendedor.getSelectedRow();
+                linhaSelecionada = tbm.get(linha);
+                populaForm(linhaSelecionada);
+            }
+        });
     }
 
-    private void popula(){
-       VendedorDao dao = new VendedorDao(ConnectionFactory.createConnectionToMySQL());
-       tbm.addList(dao.findALL());
-       EquipeDao eDao = new EquipeDao(ConnectionFactory.createConnectionToMySQL());
-       cbm.addAll(eDao.findALL());
+    private void popula() {
+        VendedorDao dao = new VendedorDao(ConnectionFactory.createConnectionToMySQL());
+        tbm.addList(dao.findALL());
+        EquipeDao eDao = new EquipeDao(ConnectionFactory.createConnectionToMySQL());
+        cbm.addAll(eDao.findALL());
     }
+
+    private void populaForm(Vendedor vendedor) {
+        jtId.setText(String.valueOf(vendedor.getId()));
+        jtNome.setText(vendedor.getNome());
+        jtNivel.setText(vendedor.getNivel());
+        cbm.setSelectedItem(vendedor.getEquipe());
+    }
+
+    private void limpaForm() {
+        jtId.setText("");
+        jtNome.setText("");
+        jtNivel.setText("");
+        jcEquipe.setSelectedIndex(-1);
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -67,7 +98,8 @@ public class VendedorGerenciar extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jtVendedor = new javax.swing.JTable();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         jLabel1.setFont(new java.awt.Font("DejaVu Serif Condensed", 1, 18)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -82,10 +114,25 @@ public class VendedorGerenciar extends javax.swing.JFrame {
         jLabel6.setText("Equipe:");
 
         jbCadastrar.setText("Cadastrar");
+        jbCadastrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbCadastrarActionPerformed(evt);
+            }
+        });
 
         jbEditar.setText("Editar");
+        jbEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbEditarActionPerformed(evt);
+            }
+        });
 
         jbExcluir.setText("Excluir");
+        jbExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbExcluirActionPerformed(evt);
+            }
+        });
 
         jtVendedor.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -121,12 +168,10 @@ public class VendedorGerenciar extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jcEquipe, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(9, 9, 9))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(jtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
-                        .addComponent(jLabel5)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel5))
+                            .addComponent(jcEquipe, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jtNivel, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
@@ -182,7 +227,61 @@ public class VendedorGerenciar extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jbCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCadastrarActionPerformed
+        // TODO add your handling code here:
+        if (jtNome.getText().isBlank() || jtNivel.getText().isBlank() || jcEquipe.getSelectedIndex() == -1) {
+            JOptionPane.showMessageDialog(this, "Todos os Campos precisam estar preenchidos");
+        } else {
+            Vendedor v = new Vendedor();
+            v.setNome(jtNome.getText());
+            v.setNivel(jtNivel.getText());
+            v.setEquipe((Equipe) jcEquipe.getSelectedItem());
+            VendedorDao dao = new VendedorDao(ConnectionFactory.createConnectionToMySQL());
+            dao.create(v);
+            JOptionPane.showMessageDialog(this, "Vendedor Cadastrado");
+            tbm.add(v);
+            limpaForm();
+        }
+    }//GEN-LAST:event_jbCadastrarActionPerformed
+
+    private void jbEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEditarActionPerformed
+        // TODO add your handling code here:
+        if (linhaSelecionada == null) {
+            JOptionPane.showMessageDialog(this, "Selecione uma equipe na tabela");
+        }
+        if (jtNome.getText().isBlank() || jtNivel.getText().isBlank() || jcEquipe.getSelectedIndex() == -1) {
+            JOptionPane.showMessageDialog(this, "Só é possivel cadastrar se todos os campos estiverem preenchidos");
+        } else{
+            VendedorDao dao = new VendedorDao(ConnectionFactory.createConnectionToMySQL());
+            linhaSelecionada.setNome(jtNome.getText());
+            linhaSelecionada.setNivel(jtNivel.getText());
+            linhaSelecionada.setEquipe((Equipe) jcEquipe.getSelectedItem());
+            linhaSelecionada.setId(Integer.parseInt(jtId.getText()));
+            dao.update(linhaSelecionada);
+            tbm.fireTableDataChanged();
+            limpaForm();
+            linhaSelecionada = null;
+        }
+    }//GEN-LAST:event_jbEditarActionPerformed
+
+    private void jbExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbExcluirActionPerformed
+        // TODO add your handling code here:
+        if (linhaSelecionada == null) {
+            JOptionPane.showMessageDialog(this, "Selecione um produto da Tabela");
+        } else {
+            int opcao = JOptionPane.showConfirmDialog(this, "Confirma a Exclusão");
+            if (opcao == JOptionPane.YES_OPTION) {
+                int id = Integer.parseInt(jtId.getText());
+                VendedorDao dao = new VendedorDao(ConnectionFactory.createConnectionToMySQL());
+                dao.delete(id);
+                tbm.remove(linhaSelecionada);
+                limpaForm();
+            }
+        }
+    }//GEN-LAST:event_jbExcluirActionPerformed
 
     /**
      * @param args the command line arguments

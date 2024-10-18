@@ -62,6 +62,8 @@ public class VendedorTableModel extends AbstractTableModel{
             case 1:
                 return vendedor.getNome();
             case 2:
+                return vendedor.getNivel();
+            case 3:
                 return vendedor.getEquipe().getNome();
             default:
                 return null;

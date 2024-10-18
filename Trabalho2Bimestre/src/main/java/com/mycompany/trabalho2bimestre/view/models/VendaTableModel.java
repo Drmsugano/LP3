@@ -4,21 +4,20 @@
  */
 package com.mycompany.trabalho2bimestre.view.models;
 
-import com.mycompany.trabalho2bimestre.bean.Equipe;
-import java.util.Iterator;
+import com.mycompany.trabalho2bimestre.bean.Venda;
 import java.util.LinkedList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
 /**
  *
- * @author drmsugano
+ * @author douglas
  */
-public class EquipeTableModel extends AbstractTableModel {
-    private List<Equipe> dados = new LinkedList<Equipe>();
-    private String[] colunas = {"ID", "Nome", "Inicio", "Fim"};
+public class VendaTableModel extends AbstractTableModel {
+private List<Venda> dados = new LinkedList<Venda>();
+    private String[] colunas = {"ID", "Produto","Vendedor","Valor","Data da Venda"};
 
-    public Equipe get(int linha) {
+    public Venda get(int linha) {
         return dados.get(linha);
     }
 
@@ -37,35 +36,37 @@ public class EquipeTableModel extends AbstractTableModel {
         return colunas[coluna];
     }
 
-    public void add(Equipe e) {
-        this.dados.add(e);
+    public void add(Venda v) {
+        this.dados.add(v);
         this.fireTableDataChanged();
     }
 
-    public void addList(List<Equipe> equipes) {
-        this.dados = equipes;
+    public void addList(List<Venda> venda) {
+        this.dados = venda;
         this.fireTableDataChanged();
     }
 
-    public void remove(Equipe e) {
-        this.dados.remove(e);
+    public void remove(Venda v) {
+        this.dados.remove(v);
         this.fireTableDataChanged();
     }
 
     @Override
     public Object getValueAt(int linha, int coluna) {
 
-        Equipe equipe = dados.get(linha);
+        Venda venda = dados.get(linha);
 
         switch (coluna) {
             case 0:
-                return equipe.getId();
+                return venda.getId();
             case 1:
-                return equipe.getNome();
+                return venda.getProduto().getDescricao();
             case 2:
-                return equipe.getDataInicio();
+                return venda.getVendedor().getNome();
             case 3:
-                return equipe.getDataFim();
+                return "R$"+ venda.getValor();
+            case 4:
+                return venda.getData();
             default:
                 return null;
         }
