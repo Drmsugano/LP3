@@ -50,7 +50,7 @@ public class VendedorDao implements Dao<Integer, Vendedor> {
     public Vendedor retrieve(Integer pk) {
         Vendedor vendedor = null;
         if (pk != null) {
-            String sql = "SELECT v.id, v.nome, e.nome FROM vendedor v WHERE id = ?";
+            String sql = "SELECT v.id, v.nome, equipe_id FROM vendedor v WHERE id = ?";
             try {
                 PreparedStatement query = con.prepareStatement(sql);
                 query.setInt(1, pk);

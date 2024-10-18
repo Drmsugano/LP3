@@ -4,10 +4,36 @@
  */
 package com.mycompany.trabalho2bimestre.view.models;
 
+import com.mycompany.trabalho2bimestre.bean.Equipe;
+import java.util.Vector;
+import javax.swing.DefaultComboBoxModel;
+
 /**
  *
  * @author Aluno
  */
-public class EquipeComboBoxModel {
-    
+public class EquipeComboBoxModel extends DefaultComboBoxModel<Equipe> {
+
+    public EquipeComboBoxModel(Vector<Equipe> itens) {
+        super(itens);
+    }
+
+    public EquipeComboBoxModel() {
+    }
+
+    public void setSelectedItem(Equipe equipe) {
+        int numElemCB = getSize();
+        for (int i = 0; i < numElemCB; i++) {
+            Equipe equipeCB = getElementAt(i);
+            if (equipeCB.getId() == equipe.getId()) {
+                super.setSelectedItem(equipeCB);
+            }
+        }
+    }
+
+    @Override
+    public Equipe getSelectedItem() {
+        Equipe equipe = (Equipe) super.getSelectedItem();
+        return equipe;
+    }
 }
