@@ -4,6 +4,10 @@
  */
 package com.mycompany.trabalho2bimestre.view;
 
+import java.text.ParseException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author drmsugano
@@ -26,8 +30,53 @@ public class Principal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu = new javax.swing.JMenu();
+        jmiEquipe = new javax.swing.JMenuItem();
+        jmiProduto = new javax.swing.JMenuItem();
+        jmiVendedor = new javax.swing.JMenuItem();
+        jmiVenda = new javax.swing.JMenuItem();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Tela Principal");
+
+        jMenu.setText("Gerenciar");
+
+        jmiEquipe.setText("Equipe");
+        jmiEquipe.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiEquipeActionPerformed(evt);
+            }
+        });
+        jMenu.add(jmiEquipe);
+
+        jmiProduto.setText("Produto");
+        jmiProduto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiProdutoActionPerformed(evt);
+            }
+        });
+        jMenu.add(jmiProduto);
+
+        jmiVendedor.setText("Vendedor");
+        jmiVendedor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiVendedorActionPerformed(evt);
+            }
+        });
+        jMenu.add(jmiVendedor);
+
+        jmiVenda.setText("Venda");
+        jmiVenda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiVendaActionPerformed(evt);
+            }
+        });
+        jMenu.add(jmiVenda);
+
+        jMenuBar1.add(jMenu);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -37,12 +86,36 @@ public class Principal extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGap(0, 274, Short.MAX_VALUE)
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jmiEquipeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiEquipeActionPerformed
+
+        try {
+            new EquipeGerenciar().setVisible(true);
+        } catch (ParseException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jmiEquipeActionPerformed
+
+    private void jmiProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiProdutoActionPerformed
+        // TODO add your handling code here:
+        new ProdutoGerenciar().setVisible(true);
+    }//GEN-LAST:event_jmiProdutoActionPerformed
+
+    private void jmiVendedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiVendedorActionPerformed
+        // TODO add your handling code here:
+        new VendedorGerenciar().setVisible(true);
+    }//GEN-LAST:event_jmiVendedorActionPerformed
+
+    private void jmiVendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiVendaActionPerformed
+        // TODO add your handling code here:
+        new VendaGerenciar().setVisible(true);
+    }//GEN-LAST:event_jmiVendaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -80,5 +153,11 @@ public class Principal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenu jMenu;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jmiEquipe;
+    private javax.swing.JMenuItem jmiProduto;
+    private javax.swing.JMenuItem jmiVenda;
+    private javax.swing.JMenuItem jmiVendedor;
     // End of variables declaration//GEN-END:variables
 }
