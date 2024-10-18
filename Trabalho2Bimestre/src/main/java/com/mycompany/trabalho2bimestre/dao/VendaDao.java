@@ -13,6 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -108,7 +109,7 @@ public class VendaDao implements Dao<Integer, Venda> {
     @Override
     public List<Venda> findALL() {
         List<Venda> venda = new LinkedList<Venda>();
-        String sql = "SELECT id,valor,produto_id,vendedor_id,data FROM venda";
+        String sql = "SELECT * FROM venda";
         try {
             PreparedStatement query = con.prepareStatement(sql);
             ProdutoDao produtoDao = new ProdutoDao(con);

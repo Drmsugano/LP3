@@ -5,6 +5,7 @@
 package com.mycompany.trabalho2bimestre.view.models;
 
 import com.mycompany.trabalho2bimestre.bean.Venda;
+import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
@@ -14,6 +15,7 @@ import javax.swing.table.AbstractTableModel;
  * @author douglas
  */
 public class VendaTableModel extends AbstractTableModel {
+    SimpleDateFormat formatData = new SimpleDateFormat("dd/MM/yyyy");
 private List<Venda> dados = new LinkedList<Venda>();
     private String[] colunas = {"ID", "Produto","Vendedor","Valor","Data da Venda"};
 
@@ -66,7 +68,7 @@ private List<Venda> dados = new LinkedList<Venda>();
             case 3:
                 return "R$"+ venda.getValor();
             case 4:
-                return venda.getData();
+                return formatData.format(venda.getData());
             default:
                 return null;
         }

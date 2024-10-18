@@ -50,7 +50,7 @@ public class ProdutoDao implements Dao<Integer, Produto> {
     public Produto retrieve(Integer pk) {
         Produto produto = null;
         if (pk != null) {
-            String sql = "SELECT descricao,tipo,quantidade,categoria FROM produto WHERE id = ?";
+            String sql = "SELECT * FROM produto WHERE id = ?";
             try {
                 PreparedStatement query = con.prepareStatement(sql);
                 query.setInt(1, pk);

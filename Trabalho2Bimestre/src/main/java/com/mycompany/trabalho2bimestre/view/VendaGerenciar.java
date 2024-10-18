@@ -17,6 +17,7 @@ import com.mycompany.trabalho2bimestre.view.models.VendedorTableModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.Connection;
+import java.util.Date;
 import javax.swing.JOptionPane;
 
 /**
@@ -234,8 +235,7 @@ public class VendaGerenciar extends javax.swing.JFrame {
             venda.setProduto((Produto) jcProduto.getSelectedItem());
             venda.setVendedor((Vendedor) jcVendedor.getSelectedItem());
             venda.setValor(Double.parseDouble(jtValor.getText()));
-            // Defina o valor e a data de acordo com sua lógica de negócio
-
+            venda.setData(new Date());
             VendaDao dao = new VendaDao(ConnectionFactory.createConnectionToMySQL());
             dao.create(venda);
             JOptionPane.showMessageDialog(this, "Venda Cadastrada");
