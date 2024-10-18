@@ -46,16 +46,16 @@ public class ProdutoGerenciar extends javax.swing.JFrame {
         ProdutoDao dao = new ProdutoDao(con);
         tbm.addList(dao.findALL());
     }
-    
-    private void populaForm(Produto produto){
+
+    private void populaForm(Produto produto) {
         jtfId.setText(String.valueOf(produto.getId()));
         jtfDescricao.setText(produto.getDescricao());
         jtfTipo.setText(produto.getTipo());
         jtfQuantidade.setText(String.valueOf(produto.getQuantidade()));
         jtfCategoria.setText(produto.getCategoria());
     }
-    
-    private void limpaTela(){
+
+    private void limpaTela() {
         jtfId.setText("");
         jtfDescricao.setText("");
         jtfTipo.setText("");
@@ -233,20 +233,27 @@ public class ProdutoGerenciar extends javax.swing.JFrame {
 
     private void jbCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCadastrarActionPerformed
         // TODO add your handling code here:
-        Produto produto = new Produto();
-        produto.setDescricao(jtfDescricao.getText());
-        produto.setTipo(jtfTipo.getText());
-        produto.setCategoria(jtfCategoria.getText());
-        produto.setQuantidade(Integer.parseInt(jtfQuantidade.getText()));
-        ProdutoDao dao = new ProdutoDao(ConnectionFactory.createConnectionToMySQL());
-        dao.create(produto);
-        tbm.add(produto);
+        if (jtfDescricao.getText().isBlank() || jtfTipo.getText().isBlank() || jtfQuantidade.getText().isBlank() || jtfCategoria.getText().isBlank()) {
+            JOptionPane.showMessageDialog(this, "Só é possivel cadastrar se todos os campos estiverem preenchidos");
+        } else {
+            Produto produto = new Produto();
+            produto.setDescricao(jtfDescricao.getText());
+            produto.setTipo(jtfTipo.getText());
+            produto.setCategoria(jtfCategoria.getText());
+            produto.setQuantidade(Integer.parseInt(jtfQuantidade.getText()));
+            ProdutoDao dao = new ProdutoDao(ConnectionFactory.createConnectionToMySQL());
+            dao.create(produto);
+            tbm.add(produto);
+        }
     }//GEN-LAST:event_jbCadastrarActionPerformed
 
     private void jbEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEditarActionPerformed
         // TODO add your handling code here:
-            if (produtoSelecionado == null) {
+        if (produtoSelecionado == null) {
             JOptionPane.showMessageDialog(this, "Selecione um produto na tabela");
+        }
+        if (jtfDescricao.getText().isBlank() || jtfTipo.getText().isBlank() || jtfQuantidade.getText().isBlank() || jtfCategoria.getText().isBlank()) {
+            JOptionPane.showMessageDialog(this, "Só é possivel cadastrar se todos os campos estiverem preenchidos");
         } else {
             produtoSelecionado.setDescricao(jtfDescricao.getText());
             produtoSelecionado.setId(Integer.parseInt(jtfId.getText()));
@@ -263,11 +270,11 @@ public class ProdutoGerenciar extends javax.swing.JFrame {
 
     private void jbExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbExcluirActionPerformed
         // TODO add your handling code here:
-        if(produtoSelecionado == null){
-            JOptionPane.showMessageDialog(this,"Selecione um produto da Tabela");
-        } else{
-            int opcao = JOptionPane.showConfirmDialog(this,"Confirma a Exclusão");
-            if(opcao == JOptionPane.YES_OPTION){
+        if (produtoSelecionado == null) {
+            JOptionPane.showMessageDialog(this, "Selecione um produto da Tabela");
+        } else {
+            int opcao = JOptionPane.showConfirmDialog(this, "Confirma a Exclusão");
+            if (opcao == JOptionPane.YES_OPTION) {
                 int id = Integer.parseInt(jtfId.getText());
                 ProdutoDao dao = new ProdutoDao(ConnectionFactory.createConnectionToMySQL());
                 dao.delete(id);

@@ -29,11 +29,12 @@ public class EquipeDao implements Dao<Integer, Equipe> {
 
     @Override
     public void create(Equipe entity) {
-        String sql = "INSERT INTO equipe (nome,fim) VALUES (?,?);";
+        String sql = "INSERT INTO equipe (nome,inicio,fim) VALUES (?,?,?);";
         try {
             PreparedStatement query = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             query.setString(1, entity.getNome());
-            query.setDate(2, (Date) entity.getDataFim());
+            query.setDate(2,new java.sql.Date(entity.getDataInicio().getTime()));
+            query.setDate(3,new java.sql.Date(entity.getDataFim().getTime()));
             query.executeUpdate();
             ResultSet rs = query.getGeneratedKeys();
             if (rs.next()) {
@@ -50,7 +51,7 @@ public class EquipeDao implements Dao<Integer, Equipe> {
     public Equipe retrieve(Integer pk) {
         Equipe equipe = null;
         if (pk != null) {
-            String sql = "SELECT id, nome, fim FROM equipe WHERE id = ?";
+            String sql = "SELECT id, nome,inicio,fim FROM equipe WHERE id = ?";
             try {
                 PreparedStatement query = con.prepareStatement(sql);
                 query.setInt(1, pk);
@@ -59,6 +60,7 @@ public class EquipeDao implements Dao<Integer, Equipe> {
                     equipe = new Equipe();
                     equipe.setId(rs.getInt("id"));
                     equipe.setNome(rs.getString("nome"));
+                    equipe.setDataInicio(rs.getDate("inicio"));
                     equipe.setDataFim(rs.getDate("fim"));
                 }
                 query.close();
@@ -71,12 +73,13 @@ public class EquipeDao implements Dao<Integer, Equipe> {
 
     @Override
     public void update(Equipe entity) {
-        String sql = "update equipe SET nome = ?, fim = ? WHERE id = ?;";
+        String sql = "update equipe SET nome = ?, inicio = ?, fim = ? WHERE id = ?;";
         try {
             PreparedStatement query = con.prepareStatement(sql);
             query.setString(1, entity.getNome());
-            query.setDate(2, (Date) entity.getDataFim());
-            query.setInt(3, entity.getId());
+            query.setDate(2, new java.sql.Date(entity.getDataInicio().getTime()));
+            query.setDate(3, new java.sql.Date(entity.getDataFim().getTime()));
+            query.setInt(4, entity.getId());
             query.executeUpdate();
             query.close();
         } catch (SQLException e) {
@@ -104,11 +107,19 @@ public class EquipeDao implements Dao<Integer, Equipe> {
     public List<Equipe> findALL() {
         List<Equipe> equipes = new LinkedList<Equipe>();
         String sql = "SELECT * FROM equipe";
-        try{
-           PreparedStatement query = con.prepareStatement(sql);
-           ResultSet rs = query.executeQuery();
-           query.close();
-        }catch(SQLException e){
+        try {
+            PreparedStatement query = con.prepareStatement(sql);
+            ResultSet rs = query.executeQuery();
+            while (rs.next()) {
+                Equipe equipe = new Equipe();
+                equipe.setId(rs.getInt("id"));
+                equipe.setNome(rs.getString("nome"));
+                equipe.setDataInicio(rs.getDate("inicio"));
+                equipe.setDataFim(rs.getDate("fim"));
+                equipes.add(equipe);
+            }
+            query.close();
+        } catch (SQLException e) {
             System.out.println("Erro : " + e.getMessage());
         }
         return equipes;

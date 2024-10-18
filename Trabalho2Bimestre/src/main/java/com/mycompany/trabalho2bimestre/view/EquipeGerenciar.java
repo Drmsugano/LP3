@@ -8,10 +8,15 @@ import com.mycompany.trabalho2bimestre.bean.Equipe;
 import com.mycompany.trabalho2bimestre.dao.EquipeDao;
 import com.mycompany.trabalho2bimestre.util.ConnectionFactory;
 import com.mycompany.trabalho2bimestre.view.models.EquipeTableModel;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.Connection;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.text.MaskFormatter;
 
 /**
@@ -21,7 +26,7 @@ import javax.swing.text.MaskFormatter;
 public class EquipeGerenciar extends javax.swing.JFrame {
 
     private EquipeTableModel tbm = new EquipeTableModel();
-    private Equipe linhaSeleciuonada = null;
+    private Equipe linhaSelecionada = null;
 
     /**
      * Creates new form EquipeGerenciar
@@ -29,18 +34,43 @@ public class EquipeGerenciar extends javax.swing.JFrame {
     public EquipeGerenciar() throws ParseException {
         initComponents();
         jtId.setEditable(false);
-
         MaskFormatter maskDataInicio = new MaskFormatter("##/##/####");
         maskDataInicio.install(jtDataInicio);
         MaskFormatter maskDataFim = new MaskFormatter("##/##/####");
-        maskDataInicio.install(jtDataFim);
+        maskDataFim.install(jtDataFim);
+        popula();
+        jtEquipe.setModel(tbm);
+        jtEquipe.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int linha = jtEquipe.getSelectedRow();
+                linhaSelecionada = tbm.get(linha);
+                populaForm(linhaSelecionada);
+            }
+        });
     }
 
-      private void popula() {
+    private void popula() {
         Connection con = ConnectionFactory.createConnectionToMySQL();
         EquipeDao dao = new EquipeDao(con);
         tbm.addList(dao.findALL());
     }
+
+    private void limpaForm() {
+        jtId.setText("");
+        jtNome.setText("");
+        jtDataInicio.setText("");
+        jtDataFim.setText("");
+    }
+
+    private void populaForm(Equipe equipe) {
+        SimpleDateFormat formatData = new SimpleDateFormat("dd/MM/yyyy");
+        jtId.setText(String.valueOf(equipe.getId()));
+        jtNome.setText(equipe.getNome());
+        jtDataInicio.setText(formatData.format(equipe.getDataInicio()));
+        jtDataFim.setText(formatData.format(equipe.getDataFim()));
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -60,10 +90,10 @@ public class EquipeGerenciar extends javax.swing.JFrame {
         jtDataInicio = new javax.swing.JFormattedTextField();
         jtDataFim = new javax.swing.JFormattedTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        jtEquipe = new javax.swing.JTable();
+        jbExcluir = new javax.swing.JButton();
+        jbEditar = new javax.swing.JButton();
+        jbCadastrar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(677, 536));
@@ -81,7 +111,7 @@ public class EquipeGerenciar extends javax.swing.JFrame {
 
         jLabel5.setText("Data Fim:");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jtEquipe.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -92,13 +122,23 @@ public class EquipeGerenciar extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(jtEquipe);
 
-        jButton1.setText("Excluir");
+        jbExcluir.setText("Excluir");
 
-        jButton2.setText("Editar");
+        jbEditar.setText("Editar");
+        jbEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbEditarActionPerformed(evt);
+            }
+        });
 
-        jButton3.setText("Cadastrar");
+        jbCadastrar.setText("Cadastrar");
+        jbCadastrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbCadastrarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -120,19 +160,19 @@ public class EquipeGerenciar extends javax.swing.JFrame {
                                 .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 530, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jtDataFim, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
-                                .addComponent(jtDataInicio, javax.swing.GroupLayout.Alignment.LEADING)))))
+                                .addComponent(jtDataFim, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
+                                .addComponent(jtDataInicio, javax.swing.GroupLayout.Alignment.LEADING))
+                            .addComponent(jtId, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(0, 33, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton3)
+                .addComponent(jbCadastrar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2)
+                .addComponent(jbEditar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1)
+                .addComponent(jbExcluir)
                 .addGap(36, 36, 36))
         );
         layout.setVerticalGroup(
@@ -158,9 +198,9 @@ public class EquipeGerenciar extends javax.swing.JFrame {
                     .addComponent(jtDataFim, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton3)
-                    .addComponent(jButton2)
-                    .addComponent(jButton1))
+                    .addComponent(jbCadastrar)
+                    .addComponent(jbEditar)
+                    .addComponent(jbExcluir))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(24, 24, 24))
@@ -168,6 +208,52 @@ public class EquipeGerenciar extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jbCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCadastrarActionPerformed
+        // TODO add your handling code here:
+        if (jtNome.getText().isBlank() || jtDataInicio.getText().isBlank() || jtDataFim.getText().isBlank()) {
+            JOptionPane.showMessageDialog(this, "Só é possivel cadastrar se todos os campos estiverem preenchidos");
+        } else {
+            Equipe equipe = new Equipe();
+            equipe.setNome(jtNome.getText());
+            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+            try {
+                equipe.setDataInicio(format.parse(jtDataInicio.getText()));
+                equipe.setDataFim(format.parse(jtDataFim.getText()));
+            } catch (ParseException ex) {
+                Logger.getLogger(EquipeGerenciar.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            EquipeDao dao = new EquipeDao(ConnectionFactory.createConnectionToMySQL());
+            dao.create(equipe);
+            JOptionPane.showMessageDialog(this, "Equipe Cadastrada");
+            tbm.add(equipe);
+            limpaForm();
+        }
+    }//GEN-LAST:event_jbCadastrarActionPerformed
+
+    private void jbEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEditarActionPerformed
+        // TODO add your handling code here:
+        SimpleDateFormat formatData = new SimpleDateFormat("dd/MM/yyyy");
+           if (linhaSelecionada == null) {
+            JOptionPane.showMessageDialog(this, "Selecione uma equipe na tabela");
+        }
+        if (jtNome.getText().isBlank() || jtDataInicio.getText().isBlank() || jtDataFim.getText().isBlank()) {
+            JOptionPane.showMessageDialog(this, "Só é possivel cadastrar se todos os campos estiverem preenchidos");
+        } else {
+            EquipeDao dao = new EquipeDao(ConnectionFactory.createConnectionToMySQL());
+            linhaSelecionada.setNome(jtNome.getText());
+            try {
+                linhaSelecionada.setDataInicio(formatData.parse(jtDataInicio.getText()));
+                linhaSelecionada.setDataFim(formatData.parse(jtDataFim.getText()));
+            } catch (ParseException ex) {
+                Logger.getLogger(EquipeGerenciar.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            linhaSelecionada.setId(Integer.parseInt(jtId.getText()));
+            dao.update(linhaSelecionada);
+            tbm.fireTableDataChanged();
+            linhaSelecionada = null;
+        }
+    }//GEN-LAST:event_jbEditarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -217,18 +303,18 @@ public class EquipeGerenciar extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JButton jbCadastrar;
+    private javax.swing.JButton jbEditar;
+    private javax.swing.JButton jbExcluir;
     private javax.swing.JFormattedTextField jtDataFim;
     private javax.swing.JFormattedTextField jtDataInicio;
+    private javax.swing.JTable jtEquipe;
     private javax.swing.JTextField jtId;
     private javax.swing.JTextField jtNome;
     // End of variables declaration//GEN-END:variables
