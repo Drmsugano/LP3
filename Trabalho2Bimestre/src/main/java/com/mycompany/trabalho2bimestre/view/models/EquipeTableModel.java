@@ -5,6 +5,7 @@
 package com.mycompany.trabalho2bimestre.view.models;
 
 import com.mycompany.trabalho2bimestre.bean.Equipe;
+import java.text.SimpleDateFormat;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -15,6 +16,7 @@ import javax.swing.table.AbstractTableModel;
  * @author drmsugano
  */
 public class EquipeTableModel extends AbstractTableModel {
+    private SimpleDateFormat formatData = new SimpleDateFormat("dd/MM/yyyy");
     private List<Equipe> dados = new LinkedList<Equipe>();
     private String[] colunas = {"ID", "Nome", "Inicio", "Fim"};
 
@@ -63,9 +65,9 @@ public class EquipeTableModel extends AbstractTableModel {
             case 1:
                 return equipe.getNome();
             case 2:
-                return equipe.getDataInicio();
+                return formatData.format(equipe.getDataInicio());
             case 3:
-                return equipe.getDataFim();
+                return formatData.format(equipe.getDataFim());
             default:
                 return null;
         }

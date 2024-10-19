@@ -278,13 +278,14 @@ public class EquipeGerenciar extends javax.swing.JFrame {
             if (opcao == JOptionPane.YES_OPTION) {
                 int id = Integer.parseInt(jtId.getText());
                 EquipeDao dao = new EquipeDao(ConnectionFactory.createConnectionToMySQL());
-                if(dao.verificarEquipe(linhaSelecionada.getId()) == true){
+                if(dao.verificarEquipe(linhaSelecionada.getId()) == false){
                     JOptionPane.showMessageDialog(this,"Não é possivel excluir equipe pois há um funcionário cadastrado nesta equipe");
                 }
-                if(dao.verificarEquipe(linhaSelecionada.getId()) == false){    
+                if(dao.verificarEquipe(linhaSelecionada.getId()) == true){    
                 dao.delete(id);
                 JOptionPane.showMessageDialog(this, "Equipe Excluida");
                 tbm.remove(linhaSelecionada);
+                limpaForm();
                 }
                 
             }

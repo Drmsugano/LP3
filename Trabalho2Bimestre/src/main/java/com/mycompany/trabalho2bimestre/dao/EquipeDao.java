@@ -104,7 +104,7 @@ public class EquipeDao implements Dao<Integer, Equipe> {
     }
 
     public boolean verificarEquipe(Integer pk) {
-        String sql = "SELECT COUNT(*) from equipe e inner join vendedor v on e.id = v.id WHERE v.id = ?";
+        String sql = "SELECT COUNT(*) from equipe e inner join vendedor v on e.id = v.id WHERE e.id = ?";
         boolean ver = true;
         try {
             PreparedStatement query = con.prepareStatement(sql);
