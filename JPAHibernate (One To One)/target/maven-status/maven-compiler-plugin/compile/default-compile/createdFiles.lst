@@ -1,0 +1,3 @@
+br/edu/ifpr/model/Pessoa.class
+br/edu/ifpr/model/Endereco.class
+br/edu/ifpr/test/TesteDePersistencia.class
