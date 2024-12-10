@@ -6,6 +6,7 @@ package com.mycompany.trabalho3bimestre.dao;
 
 import com.mycompany.trabalho3bimestre.bean.Equipe;
 import jakarta.persistence.Query;
+import jakarta.persistence.TypedQuery;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -26,8 +27,11 @@ public class EquipeDao extends GenericDao<Equipe, Long> {
     }
 
     public boolean verificarEquipe(int id) {
-        String jpql = "SELECT COUNT(e) from equipe e where e.id = :id";
-        Query query = entityManager.createQuery(jpql);
-        query.setParameter(1, id);
+        String jpql = "SELECT COUNT(e) FROM Equipe e WHERE e.id = :id";
+        TypedQuery<Long> query = entityManager.createQuery(jpql, Long.class);
+        query.setParameter("id", id);
+        Long count = query.getSingleResult(); // COUNT sempre retorna Long
+        return count > 0;
     }
+
 }

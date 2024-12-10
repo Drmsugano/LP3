@@ -268,24 +268,26 @@ public class EquipeGerenciar extends javax.swing.JFrame {
     }//GEN-LAST:event_jbEditarActionPerformed
 
     private void jbExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbExcluirActionPerformed
-        // TODO add your handling code here:
         if (linhaSelecionada == null) {
-            JOptionPane.showMessageDialog(this, "Selecione um produto da Tabela");
-        } else {
-            int opcao = JOptionPane.showConfirmDialog(this, "Confirma a Exclusão");
-            if (opcao == JOptionPane.YES_OPTION) {
-                long id = Integer.parseInt(jtId.getText());
-                EquipeDao dao = new EquipeDao();
-                if(dao.verificarEquipe(linhaSelecionada.getId()) == false){
-                    JOptionPane.showMessageDialog(this,"Não é possivel excluir equipe pois há um funcionário cadastrado nesta equipe");
-                }
-                if(dao.verificarEquipe(linhaSelecionada.getId()) == true){    
+            JOptionPane.showMessageDialog(this, "Selecione um produto da tabela");
+            return;
+        }
+        int opcao = JOptionPane.showConfirmDialog(this, "Confirma a exclusão?", "Confirmação", JOptionPane.YES_NO_OPTION);
+        if (opcao == JOptionPane.YES_OPTION) {
+            long id = linhaSelecionada.getId();
+            EquipeDao dao = new EquipeDao();
+            boolean equipeTemFuncionario = dao.verificarEquipe((int) id);
+            if (equipeTemFuncionario) {
+                JOptionPane.showMessageDialog(this, "Não é possível excluir a equipe pois há funcionários cadastrados nesta equipe.");
+                return;
+            }
+            try {
                 dao.remover(id);
-                JOptionPane.showMessageDialog(this, "Equipe Excluida");
+                JOptionPane.showMessageDialog(this, "Equipe excluída com sucesso.");
                 tbm.remove(linhaSelecionada);
                 limpaForm();
-                }
-                
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Erro ao excluir a equipe: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             }
         }
     }//GEN-LAST:event_jbExcluirActionPerformed
