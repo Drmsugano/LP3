@@ -53,6 +53,10 @@ public class EquipeTableModel extends AbstractTableModel {
         this.dados.remove(e);
         this.fireTableDataChanged();
     }
+    
+    public void setList(List<Equipe> equipe) {
+    this.dados = equipe;
+    }
 
     @Override
     public Object getValueAt(int linha, int coluna) {
@@ -65,9 +69,9 @@ public class EquipeTableModel extends AbstractTableModel {
             case 1:
                 return equipe.getNome();
             case 2:
-                return formatData.format(equipe.getDataInicio());
+                return equipe.getDataInicio() != null ? formatData.format(equipe.getDataInicio()) : "Sem Data de Inicio";
             case 3:
-                return formatData.format(equipe.getDataFim());
+                return equipe.getDataFim() != null ? formatData.format(equipe.getDataFim()) : "Sem Data de Fim";
             default:
                 return null;
         }

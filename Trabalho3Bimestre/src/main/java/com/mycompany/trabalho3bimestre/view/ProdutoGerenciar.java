@@ -9,6 +9,9 @@ import com.mycompany.trabalho3bimestre.dao.ProdutoDao;
 import com.mycompany.trabalho3bimestre.view.models.ProdutoTableModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 
 /**
@@ -28,6 +31,7 @@ public class ProdutoGerenciar extends javax.swing.JFrame {
         jtfId.setEditable(false);
         tbm = new ProdutoTableModel();
         tblProduto.setModel(tbm);
+        preencherComboBoxCategoria(jcbCategoria);
         popula();
         tblProduto.addMouseListener(new MouseAdapter() {
             @Override
@@ -37,6 +41,18 @@ public class ProdutoGerenciar extends javax.swing.JFrame {
                 populaForm(produtoSelecionado);
             }
         });
+    }
+
+    private void filtrarProdutosPorCategoria() {
+        String categoriaSelecionada = (String) jcbCategoria.getSelectedItem();
+        if (categoriaSelecionada != null && !categoriaSelecionada.isEmpty()) {
+            ProdutoDao dao = new ProdutoDao();
+            List<Produto> produtosFiltrados = dao.retrieveCategoria(categoriaSelecionada);
+            tbm.setList(produtosFiltrados);
+            tbm.fireTableDataChanged(); // Atualiza a tabela
+        } else {
+            JOptionPane.showMessageDialog(this, "Selecione uma categoria para filtrar.");
+        }
     }
 
     private void popula() {
@@ -85,6 +101,9 @@ public class ProdutoGerenciar extends javax.swing.JFrame {
         jbExcluir = new javax.swing.JButton();
         jbEditar = new javax.swing.JButton();
         jbCadastrar = new javax.swing.JButton();
+        jcbCategoria = new javax.swing.JComboBox<>();
+        jLabel7 = new javax.swing.JLabel();
+        jbFiltro = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -143,6 +162,21 @@ public class ProdutoGerenciar extends javax.swing.JFrame {
             }
         });
 
+        jcbCategoria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jcbCategoriaActionPerformed(evt);
+            }
+        });
+
+        jLabel7.setText("Categoria:");
+
+        jbFiltro.setText("Filtrar");
+        jbFiltro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbFiltroActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -162,30 +196,36 @@ public class ProdutoGerenciar extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jtfDescricao)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jtfId, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(0, 0, Short.MAX_VALUE))
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                         .addComponent(jtfTipo)
                                         .addGap(18, 18, 18)
                                         .addComponent(jLabel5)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(jtfQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(8, 8, 8))))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(86, 86, 86)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jtfCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 564, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(8, 8, 8))
                                     .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jtfId, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jtfCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 564, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(0, 0, Short.MAX_VALUE))))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(21, 21, 21)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 636, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(6, 6, 6)
+                                        .addComponent(jLabel7)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jcbCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jbFiltro)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 132, Short.MAX_VALUE)
                                         .addComponent(jbCadastrar)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(jbEditar)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jbExcluir))))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(21, 21, 21)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 636, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 14, Short.MAX_VALUE)))
+                                        .addComponent(jbExcluir)))))
+                        .addGap(0, 19, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -212,11 +252,19 @@ public class ProdutoGerenciar extends javax.swing.JFrame {
                     .addComponent(jLabel6)
                     .addComponent(jtfCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jbExcluir)
-                    .addComponent(jbEditar)
-                    .addComponent(jbCadastrar))
-                .addGap(24, 24, 24)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jbExcluir)
+                            .addComponent(jbEditar)
+                            .addComponent(jbCadastrar))
+                        .addGap(24, 24, 24))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jcbCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel7)
+                            .addComponent(jbFiltro))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(19, Short.MAX_VALUE))
         );
@@ -283,6 +331,25 @@ public class ProdutoGerenciar extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jbExcluirActionPerformed
 
+    private void jcbCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbCategoriaActionPerformed
+
+    }//GEN-LAST:event_jcbCategoriaActionPerformed
+
+    private void jbFiltroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbFiltroActionPerformed
+        // TODO add your handling code here:
+        filtrarProdutosPorCategoria();
+    }//GEN-LAST:event_jbFiltroActionPerformed
+
+    private void preencherComboBoxCategoria(JComboBox<String> jcbCategoria) {
+        ProdutoDao dao = new ProdutoDao();
+        List<String> categorias = dao.listCategoria();
+        DefaultComboBoxModel<String> comboBoxModel = new DefaultComboBoxModel<>();
+        for (String categoria : categorias) {
+            comboBoxModel.addElement(categoria);
+        }
+        jcbCategoria.setModel(comboBoxModel);
+    }
+
     /**
      * @param args the command line arguments
      */
@@ -325,10 +392,13 @@ public class ProdutoGerenciar extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton jbCadastrar;
     private javax.swing.JButton jbEditar;
     private javax.swing.JButton jbExcluir;
+    private javax.swing.JButton jbFiltro;
+    private javax.swing.JComboBox<String> jcbCategoria;
     private javax.swing.JTextField jtfCategoria;
     private javax.swing.JTextField jtfDescricao;
     private javax.swing.JTextField jtfId;

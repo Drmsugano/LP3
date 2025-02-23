@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package com.mycompany.trabalho3bimestre.view;
+
 import com.mycompany.trabalho3bimestre.bean.Produto;
 import com.mycompany.trabalho3bimestre.bean.Venda;
 import com.mycompany.trabalho3bimestre.bean.Vendedor;
@@ -15,6 +16,7 @@ import com.mycompany.trabalho3bimestre.view.models.VendedorComboBoxModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Date;
+import java.util.List;
 import javax.swing.JOptionPane;
 
 /**
@@ -22,10 +24,12 @@ import javax.swing.JOptionPane;
  * @author drmsugano
  */
 public class VendaGerenciar extends javax.swing.JFrame {
+
     private VendaTableModel tbm;
     private ProdutoComboBoxModel produtoCbm;
     private VendedorComboBoxModel vendedorCbm;
     private Venda linhaSelecionada = null;
+
     /**
      * Creates new form VendaGerenciar
      */
@@ -38,9 +42,13 @@ public class VendaGerenciar extends javax.swing.JFrame {
 
         produtoCbm = new ProdutoComboBoxModel();
         jcProduto.setModel(produtoCbm);
-        
+
         vendedorCbm = new VendedorComboBoxModel();
         jcVendedor.setModel(vendedorCbm);
+
+        jcVendedor2.setModel(vendedorCbm);
+        
+        jcProduto2.setModel(produtoCbm);
         popula();
         jtVenda.addMouseListener(new MouseAdapter() {
             @Override
@@ -55,10 +63,10 @@ public class VendaGerenciar extends javax.swing.JFrame {
     private void popula() {
         VendaDao vendaDao = new VendaDao();
         tbm.addList(vendaDao.getList());
-        
+
         ProdutoDao produtoDao = new ProdutoDao();
         produtoCbm.addAll(produtoDao.getList());
-        
+
         VendedorDao vendedorDao = new VendedorDao();
         vendedorCbm.addAll(vendedorDao.getList());
     }
@@ -76,6 +84,7 @@ public class VendaGerenciar extends javax.swing.JFrame {
         jcVendedor.setSelectedIndex(-1);
         jtValor.setText(""); // Limpa o campo de valor
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -99,6 +108,12 @@ public class VendaGerenciar extends javax.swing.JFrame {
         jtVenda = new javax.swing.JTable();
         jLabel5 = new javax.swing.JLabel();
         jtValor = new javax.swing.JFormattedTextField();
+        jLabel6 = new javax.swing.JLabel();
+        jcVendedor2 = new javax.swing.JComboBox<>();
+        jbFiltro = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        jbFiltro2 = new javax.swing.JButton();
+        jcProduto2 = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -148,6 +163,24 @@ public class VendaGerenciar extends javax.swing.JFrame {
 
         jLabel5.setText("Valor:");
 
+        jLabel6.setText("Contagem de Vendas por Vendedor:");
+
+        jbFiltro.setText("Filtrar");
+        jbFiltro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbFiltroActionPerformed(evt);
+            }
+        });
+
+        jLabel7.setText("Filtro por Produto:");
+
+        jbFiltro2.setText("Filtragem Produto");
+        jbFiltro2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbFiltro2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -158,37 +191,46 @@ public class VendaGerenciar extends javax.swing.JFrame {
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addGap(41, 41, 41)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel2)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel4)
+                        .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jtValor, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jtId, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jcProduto, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 743, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 25, Short.MAX_VALUE))
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jcVendedor, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jbCadastrar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jbAlterar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jbExcluir)))
+                .addGap(25, 25, 25))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(41, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 743, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel5))
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel6))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jcVendedor2, 0, 150, Short.MAX_VALUE)
+                            .addComponent(jcProduto2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jbCadastrar)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jbAlterar)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jbExcluir))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jcProduto, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jLabel3)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jcVendedor, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(25, 25, 25))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jtId, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jtValor, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
+                            .addComponent(jbFiltro)
+                            .addComponent(jbFiltro2))))
+                .addGap(25, 25, 25))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -214,9 +256,19 @@ public class VendaGerenciar extends javax.swing.JFrame {
                     .addComponent(jbExcluir)
                     .addComponent(jbAlterar)
                     .addComponent(jbCadastrar))
-                .addGap(28, 28, 28)
+                .addGap(60, 60, 60)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(jcVendedor2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jbFiltro))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(jbFiltro2)
+                    .addComponent(jcProduto2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(33, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -277,6 +329,26 @@ public class VendaGerenciar extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jbExcluirActionPerformed
 
+    private void jbFiltroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbFiltroActionPerformed
+        // TODO add your handling code here:
+        VendaDao vendaDao = new VendaDao();
+        long quantidade = vendaDao.contarVendasPorVendedor((Vendedor) jcVendedor2.getSelectedItem());
+        JOptionPane.showMessageDialog(this, "O vendedor realizou " + quantidade + " vendas.");
+    }//GEN-LAST:event_jbFiltroActionPerformed
+
+    private void jbFiltro2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbFiltro2ActionPerformed
+        // TODO add your handling code here:
+        Produto produtoSelecionado = (Produto) jcProduto2.getSelectedItem();
+        if (produtoSelecionado != null) {
+            VendaDao dao = new VendaDao();
+            List<Venda> vendasFiltradas = dao.retrieveProduto(produtoSelecionado);
+            tbm.setList(vendasFiltradas);
+            tbm.fireTableDataChanged(); 
+        } else {
+            JOptionPane.showMessageDialog(this, "Selecione uma categoria para filtrar.");
+        }
+    }//GEN-LAST:event_jbFiltro2ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -318,12 +390,18 @@ public class VendaGerenciar extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton jbAlterar;
     private javax.swing.JButton jbCadastrar;
     private javax.swing.JButton jbExcluir;
+    private javax.swing.JButton jbFiltro;
+    private javax.swing.JButton jbFiltro2;
     private javax.swing.JComboBox<Produto> jcProduto;
+    private javax.swing.JComboBox<Produto> jcProduto2;
     private javax.swing.JComboBox<Vendedor> jcVendedor;
+    private javax.swing.JComboBox<Vendedor> jcVendedor2;
     private javax.swing.JTextField jtId;
     private javax.swing.JFormattedTextField jtValor;
     private javax.swing.JTable jtVenda;

@@ -5,6 +5,7 @@
 package com.mycompany.trabalho3bimestre.dao;
 
 import com.mycompany.trabalho3bimestre.bean.Equipe;
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import java.sql.Connection;
@@ -26,12 +27,48 @@ public class EquipeDao extends GenericDao<Equipe, Long> {
         super(Equipe.class);
     }
 
-    public boolean verificarEquipe(int id) {
-        String jpql = "SELECT COUNT(e) FROM Equipe e WHERE e.id = :id";
-        TypedQuery<Long> query = entityManager.createQuery(jpql, Long.class);
-        query.setParameter("id", id);
-        Long count = query.getSingleResult(); // COUNT sempre retorna Long
-        return count > 0;
+    public boolean verificarEquipe(Integer equipeId) {
+        boolean estaVinculada = false;
+        try {
+            // Consulta JPQL para verificar se há funcionários vinculados à equipe
+            String jpql = "SELECT COUNT(v) FROM Vendedor v WHERE v.equipe.id = :equipeId";
+            Long count = entityManager.createQuery(jpql, Long.class)
+                    .setParameter("equipeId", equipeId)
+                    .getSingleResult();
+
+            estaVinculada = count > 0; // Retorna true se houver pelo menos um funcionário
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return estaVinculada;
+    }
+
+    public List<Equipe> retrieveFiltro(String filtragem) {
+        List<Equipe> equipe = new LinkedList<>(); // Garante que nunca será null
+        switch (filtragem) {
+            case "Inativa":
+                try {
+                    String jpql = "SELECT e FROM Equipe e WHERE e.dataFim IS NOT NULL";
+                    equipe = entityManager.createQuery(jpql, Equipe.class).getResultList();
+                    System.out.println(equipe);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            case "Ativa":
+                try {
+                    String jpql = "SELECT e FROM Equipe e WHERE e.dataFim IS NULL";
+                    equipe = entityManager.createQuery(jpql, Equipe.class).getResultList();
+                    System.out.println(equipe);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                System.out.println("Filtro inválido: " + filtragem);
+                break;
+        }
+        return equipe;
     }
 
 }

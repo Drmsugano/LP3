@@ -51,6 +51,11 @@ public class ProdutoTableModel extends AbstractTableModel {
         this.dados.remove(p);
         this.fireTableDataChanged();
     }
+    
+    public void setList(List<Produto> produtos) {
+    this.dados = produtos;
+    }
+    
 
     @Override
     public Object getValueAt(int linha, int coluna) {

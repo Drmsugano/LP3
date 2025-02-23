@@ -4,6 +4,7 @@
  */
 package com.mycompany.trabalho3bimestre.view.models;
 
+import com.mycompany.trabalho3bimestre.bean.Produto;
 import com.mycompany.trabalho3bimestre.bean.Venda;
 import java.text.SimpleDateFormat;
 import java.util.LinkedList;
@@ -51,6 +52,10 @@ private List<Venda> dados = new LinkedList<Venda>();
     public void remove(Venda v) {
         this.dados.remove(v);
         this.fireTableDataChanged();
+    }
+    
+     public void setList(List<Venda> vendas) {
+         this.dados = vendas;
     }
 
     @Override

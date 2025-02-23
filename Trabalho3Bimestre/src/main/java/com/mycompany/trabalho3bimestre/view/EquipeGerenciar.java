@@ -13,6 +13,7 @@ import java.sql.Connection;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -66,7 +67,7 @@ public class EquipeGerenciar extends javax.swing.JFrame {
         jtId.setText(String.valueOf(equipe.getId()));
         jtNome.setText(equipe.getNome());
         jtDataInicio.setText(formatData.format(equipe.getDataInicio()));
-        jtDataFim.setText(formatData.format(equipe.getDataFim()));
+        jtDataFim.setText(equipe.getDataFim() != null ? formatData.format(equipe.getDataFim()) : "");
     }
 
     /**
@@ -92,6 +93,9 @@ public class EquipeGerenciar extends javax.swing.JFrame {
         jbExcluir = new javax.swing.JButton();
         jbEditar = new javax.swing.JButton();
         jbCadastrar = new javax.swing.JButton();
+        jLabel6 = new javax.swing.JLabel();
+        jcFiltro = new javax.swing.JComboBox<>();
+        jbFiltro = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(677, 536));
@@ -143,6 +147,17 @@ public class EquipeGerenciar extends javax.swing.JFrame {
             }
         });
 
+        jLabel6.setText("Filtrar Equipes:");
+
+        jcFiltro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ativa", "Inativa" }));
+
+        jbFiltro.setText("Filtrar");
+        jbFiltro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbFiltroActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -153,29 +168,35 @@ public class EquipeGerenciar extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(29, 29, 29)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 609, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel5)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel4)
-                                .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 530, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jtDataFim, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
-                                .addComponent(jtDataInicio, javax.swing.GroupLayout.Alignment.LEADING))
-                            .addComponent(jtId, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(0, 33, Short.MAX_VALUE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel4)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel5))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 530, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jtDataFim, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
+                        .addComponent(jtDataInicio, javax.swing.GroupLayout.Alignment.LEADING))
+                    .addComponent(jtId, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 6, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jbCadastrar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jbEditar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jbExcluir)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 609, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(109, 109, 109)
+                        .addComponent(jcFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jbFiltro)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jbCadastrar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jbEditar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jbExcluir)))
                 .addGap(36, 36, 36))
         );
         layout.setVerticalGroup(
@@ -200,13 +221,21 @@ public class EquipeGerenciar extends javax.swing.JFrame {
                     .addComponent(jLabel5)
                     .addComponent(jtDataFim, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jbCadastrar)
-                    .addComponent(jbEditar)
-                    .addComponent(jbExcluir))
-                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jbCadastrar)
+                            .addComponent(jbEditar)
+                            .addComponent(jbExcluir))
+                        .addGap(36, 36, 36))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel6)
+                            .addComponent(jcFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jbFiltro))
+                        .addGap(18, 18, 18)))
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(24, 24, 24))
+                .addContainerGap())
         );
 
         pack();
@@ -266,7 +295,20 @@ public class EquipeGerenciar extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_jbEditarActionPerformed
-
+    
+    private void filtrarEquipe()
+    {
+        String filtro = (String) jcFiltro.getSelectedItem();
+        if (filtro != null && !filtro.isEmpty()) {
+            EquipeDao dao = new EquipeDao();
+            List<Equipe> equipesFiltradas = dao.retrieveFiltro((String) filtro);
+            tbm.setList(equipesFiltradas);
+            tbm.fireTableDataChanged();
+        } else {
+            JOptionPane.showMessageDialog(this, "Selecione um Status para filtrar.");
+        }
+    }
+    
     private void jbExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbExcluirActionPerformed
         if (linhaSelecionada == null) {
             JOptionPane.showMessageDialog(this, "Selecione um produto da tabela");
@@ -276,7 +318,7 @@ public class EquipeGerenciar extends javax.swing.JFrame {
         if (opcao == JOptionPane.YES_OPTION) {
             long id = linhaSelecionada.getId();
             EquipeDao dao = new EquipeDao();
-            boolean equipeTemFuncionario = dao.verificarEquipe((int) id);
+            boolean equipeTemFuncionario = dao.verificarEquipe((int)id);
             if (equipeTemFuncionario) {
                 JOptionPane.showMessageDialog(this, "Não é possível excluir a equipe pois há funcionários cadastrados nesta equipe.");
                 return;
@@ -291,6 +333,11 @@ public class EquipeGerenciar extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_jbExcluirActionPerformed
+
+    private void jbFiltroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbFiltroActionPerformed
+        // TODO add your handling code here:
+        filtrarEquipe();
+    }//GEN-LAST:event_jbFiltroActionPerformed
 
     /**
      * @param args the command line arguments
@@ -345,10 +392,13 @@ public class EquipeGerenciar extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton jbCadastrar;
     private javax.swing.JButton jbEditar;
     private javax.swing.JButton jbExcluir;
+    private javax.swing.JButton jbFiltro;
+    private javax.swing.JComboBox<String> jcFiltro;
     private javax.swing.JFormattedTextField jtDataFim;
     private javax.swing.JFormattedTextField jtDataInicio;
     private javax.swing.JTable jtEquipe;
